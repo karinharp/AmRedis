@@ -1,0 +1,6 @@
+{
+      "role"       : "server"
+    , "mode"       : "set"
+    , "k"          : "foo"
+    , "v"          : "bar"
+}
