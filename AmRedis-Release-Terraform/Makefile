@@ -19,8 +19,8 @@ PROJECT_NAME          := `echo ${PROJECT} | tr A-Z a-z`
 PROJECT_DB_REVISION   ?=
 PROJECT_ENV           ?= 
 
-CLUSTER_ID      := ${shell cat ClusterId.txt}
-CLUSTER_NODE_ID := ${shell cat ClusterNodeId.txt}
+CLUSTER_ID      ?= ${shell cat ClusterId.txt}
+CLUSTER_NODE_ID ?= ${shell cat ClusterNodeId.txt}
 
 #####################################################################################
 

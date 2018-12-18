@@ -7,6 +7,7 @@ Terraformのスケルトン
 - tfstate管理用のS3 bucketを準備
 	- 1つのbucketを複数リソースで使いまわしていいので、２つ目以降は不要
 - このスケルトンをcloneして、ディレクトリ名を変更
+- touch Makefile.env
 - make env
 - Makefile.env のパラメータ書き換え
 - make tf-init
