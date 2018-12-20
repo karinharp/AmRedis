@@ -119,10 +119,10 @@ api-log:
 	serverless logs --function ${API_FUNC} --stage ${API_STAGE}
 
 export-api-list:
-	serverless info --stage dev | grep "https://" | awk '{print $$3}' > apiList.txt
+	serverless info --stage ${API_STAGE} | grep "https://" | awk '{print $$3}' > apiList.txt
 
 export-api-key:
-	serverless info --stage dev | grep -a1 "api keys" | tail -n1 | cut -d":" -f2 | awk '{print $$1}' > apiKey.txt
+	serverless info --stage ${API_STAGE} | grep -a1 "api keys" | tail -n1 | cut -d":" -f2 | awk '{print $$1}' > apiKey.txt
 
 api-info: export-api-list export-api-key
 	php tools/CreateInfo.php > ${PROJECT}Info-${API_STAGE}.json
