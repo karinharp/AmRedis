@@ -25,9 +25,12 @@ vendor/bundle
 .bundle/
 
 # 動的生成
+AmRedisInfo-*.json
 serverlessConfig.yml
 serverlessVpcConfig.yml
 serverlessRedisConfig.yml
 ApiInfo-*.json
 apiKey.txt
 apiList.txt
+ClusterId.txt
+ClusterNodeId.txt
