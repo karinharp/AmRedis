@@ -27,6 +27,8 @@ public class RedisData
 	// Save Mode Only
 	[DataMember(Name = "v")]
 	public string v { get; set; } = "";
+	[DataMember(Name = "ttlSec")]
+	public int ttlSec { get; set; } = -1;
     }
     
     public class Response

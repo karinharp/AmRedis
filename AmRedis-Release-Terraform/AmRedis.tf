@@ -46,6 +46,14 @@ resource "aws_route_table" "RouteTable" {
     ipv6_cidr_block = "::/0"
     gateway_id = "${aws_internet_gateway.IGW.id}"
   }
+# VPC Peeringする場合は、生成後、定義を追加しておくとよい。
+# ただ、VPC作り直すと、Peering作り直しになるので注意
+# Peeringに関しては、承諾処理が必要になるため、Terraformでは無理。
+# Peering先からRedisSegmentに対するRoutingは別途設定が必要
+# route {
+#   cidr_block = "172.31.0.0/16"
+#   gateway_id = "pcx-************"
+# }
   tags {
     Name = "${var.title}-${var.env}"
   }
@@ -65,7 +73,8 @@ resource "aws_security_group" "Security" {
     from_port = 6379
     to_port   = 6379
     protocol  = "tcp"
-    self = true
+    cidr_blocks = ["0.0.0.0/0"]
+#   self = true
   }
   egress {
     from_port = 0
@@ -92,6 +101,7 @@ resource "aws_security_group" "Security" {
 resource "aws_elasticache_cluster" "redis" {
   cluster_id           = "${var.title}-ec-${var.env}"
   engine               = "redis"
+  engine_version       = "5.0.0"
   node_type            = "cache.t2.micro"
   port                 = 6379
   num_cache_nodes      = 1

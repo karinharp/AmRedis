@@ -34,9 +34,21 @@ public class RedisServer
 	try{
 	    ConnectionMultiplexer redis = ConnectionMultiplexer.Connect(data.redisURI);
 	    IDatabase cache = redis.GetDatabase();
-	    resp.v = cache.StringGet(data.k);
-	    if(resp.v == null){ resp.v = ""; resp.status = RedisError.E_NOTFOUND.ToString(); }
-	    else              {              resp.status = RedisError.E_OK.ToString(); }	    
+	    var redisResp = cache.StringGetWithExpiry(data.k);
+	    if(redisResp.Value.IsNullOrEmpty){ resp.v = ""; resp.status = RedisError.E_NOTFOUND.ToString(); }
+	    else
+	    {
+		resp.v = redisResp.Value.ToString();
+		if(redisResp.Expiry != null)
+		{
+		    TimeSpan tmp = (TimeSpan)redisResp.Expiry; // Null許容オプション付いてるので...
+		    resp.ttlSec  = (int)tmp.TotalSeconds; 
+		}
+		resp.status  = RedisError.E_OK.ToString();
+	    }
+	    //resp.v = cache.StringGet(data.k);
+	    //if(resp.v == null){ resp.v = ""; resp.status = RedisError.E_NOTFOUND.ToString(); }
+	    //else              {              resp.status = RedisError.E_OK.ToString(); }	    
 	}
 	catch (Exception ex){
 	    m_ctx.Log(ex.Message);	
@@ -47,13 +59,32 @@ public class RedisServer
     }
 
     public RedisData.Response Set(LambdaRedisArg data){
-	
-	var resp    = new RedisData.Response(){ status = RedisError.E_CHAOS.ToString(), k = data.k  };
+
+	m_ctx.Log("SetTTL > " + data.ttlSec.ToString()); 
+
 	try {
 	    ConnectionMultiplexer redis = ConnectionMultiplexer.Connect(data.redisURI);
 	    IDatabase cache = redis.GetDatabase();
-	    cache.StringSet(data.k, data.v);
-	    resp.status = RedisError.E_OK.ToString();	    
+
+	    // TTLセットする場合
+	    if(data.ttlSec > 0)
+	    {
+		if(cache.StringSet(data.k, data.v, TimeSpan.FromSeconds(data.ttlSec))){
+		    resp.status = RedisError.E_OK.ToString();
+		}
+		else {
+		    resp.status = RedisError.E_CRITICAL.ToString();		
+		}
+	    }
+	    else
+	    {
+		if(cache.StringSet(data.k, data.v)){
+		    resp.status = RedisError.E_OK.ToString();
+		}
+		else {
+		    resp.status = RedisError.E_CRITICAL.ToString();		
+		}
+	    }
 	}
 	catch(Exception ex)
 	{

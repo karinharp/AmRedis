@@ -44,7 +44,7 @@ public class RedisClient
     void Log(string msg){
         UnityEngine.Debug.Log(msg);
     }
-#endif
+#endif    
     
     public async Task<RedisData.Response> Get(string k){
 	var resp = new RedisData.Response(){ status = RedisError.E_CHAOS.ToString() };
@@ -86,7 +86,7 @@ public class RedisClient
 	return resp;
     }
 
-    public async Task<RedisData.Response> Set(string k, string v){
+    public async Task<RedisData.Response> Set(string k, string v, int ttlSec = -1){
 	var resp = new RedisData.Response(){ status = RedisError.E_CHAOS.ToString() };
 
 	using (var client = new HttpClient()){
@@ -99,7 +99,8 @@ public class RedisClient
 			     role      = "server",
 			     mode      = "set",
 			     k         = k,
-			     v         = v
+			     v         = v,
+			     ttlSec    = ttlSec,
 			 })
 		     ,Encoding.UTF8, @"application/json"
 		     );

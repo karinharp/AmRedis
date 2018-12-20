@@ -72,7 +72,7 @@ public class LambdaRedis : LambdaBase<LambdaRedisArg>
 	}	
 	
 	if(data.mode == "set")
-	{ ret = await redisClient.Set(data.k, data.v); }
+	{ ret = await redisClient.Set(data.k, data.v, data.ttlSec); }
 	else if(data.mode == "get")
 	{ ret = await redisClient.Get(data.k); }
 	else
@@ -118,8 +118,9 @@ public class LambdaRedisArg : LambdaBaseArg
     /*==[ lambda args ]=====================================================================*/
     
     // header
-    public string k  { get; set; } = "";
-    public string v  { get; set; } = "";
+    public string k       { get; set; } = "";
+    public string v       { get; set; } = "";
+    public int    ttlSec  { get; set; } = -1;
     
     /*==[ env params  ]=====================================================================*/
 
