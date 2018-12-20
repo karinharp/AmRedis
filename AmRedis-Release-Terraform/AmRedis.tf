@@ -107,6 +107,7 @@ resource "aws_elasticache_cluster" "redis" {
   num_cache_nodes      = 1
   parameter_group_name = "default.redis5.0"
   subnet_group_name = "${aws_elasticache_subnet_group.SubnetGroup.name}"
+  security_group_ids = ["${aws_security_group.Security.id}"]
   tags {
     Name = "${var.title}-${var.env}"
   }
