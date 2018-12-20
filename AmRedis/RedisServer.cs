@@ -59,6 +59,8 @@ public class RedisServer
     }
 
     public RedisData.Response Set(LambdaRedisArg data){
+	
+	var resp = new RedisData.Response(){ status = RedisError.E_CHAOS.ToString(), k = data.k };
 
 	m_ctx.Log("SetTTL > " + data.ttlSec.ToString()); 
 

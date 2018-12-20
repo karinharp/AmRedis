@@ -9,6 +9,7 @@ public enum RedisError {
     E_TIMEOUT,
     E_INVALID_ARGS,
     E_NOTFOUND,
+    E_NOTMATCH,
     E_TTL_ERROR,
     
 }

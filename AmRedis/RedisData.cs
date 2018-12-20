@@ -41,6 +41,8 @@ public class RedisData
 	public string k { get; set; } = "";
 	[DataMember(Name = "v")]
 	public string v { get; set; } = "";
+	[DataMember(Name = "ttlSec")]
+	public int ttlSec { get; set; } = -1;
     }
     
     /*=========================================================*/
